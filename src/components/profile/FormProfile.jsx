@@ -24,23 +24,21 @@ const FormularioPerfil = () => {
         })
     }, [user, reset])
 
-    // --- SISTEMA DE ESTILOS UNIFICADO (COMO EN TU OTRO FORMULARIO) ---
-
-    // Fondo: Beige (#f3eee0) en Light / Negro (#000000) en Dark
-    const containerBase = "bg-[#edebe0] dark:bg-[#000000] border-2 border-black dark:border-[#3f3f46] p-8 rounded-[3rem] shadow-2xl flex-1 flex flex-col justify-between transition-colors duration-300";
-    
-    // Inputs: Fondo igual al contenedor para evitar parches
-    const inputBase = "w-full bg-[#edebe0] dark:bg-[#000000] text-sm text-black dark:text-white border-2 border-black dark:border-[#71717a] rounded-2xl py-3 px-4 outline-none focus:border-emerald-500 transition-all placeholder:text-zinc-500";
-    
-    // Etiquetas: Negro en Light / Blanco en Dark
-    const labelBase = "text-[10px] font-black uppercase tracking-widest ml-1 flex items-center gap-2 text-black dark:text-white";
+    const containerBase = "bg-surface-container-low dark:bg-slate-900/80 border border-outline-variant/70 dark:border-slate-700 p-6 md:p-7 rounded-3xl shadow-sm flex-1 flex flex-col justify-between transition-colors duration-300";
+    const inputBase = "w-full bg-surface dark:bg-slate-800/70 text-sm text-on-surface dark:text-white border border-outline-variant/70 dark:border-slate-700 rounded-xl py-3 px-4 outline-none focus:border-secondary dark:focus:border-cyan-400 focus:ring-2 focus:ring-secondary/10 dark:focus:ring-cyan-400/10 transition-all placeholder:text-on-surface-variant/70 dark:placeholder:text-slate-500";
+    const labelBase = "text-[10px] font-label uppercase tracking-widest ml-1 flex items-center gap-2 text-on-surface-variant dark:text-slate-400";
 
     return ( 
-        <div className="w-full h-full flex flex-col bg-transparent">
-            <ToastContainer theme="dark" />
+        <div className="w-full h-full flex flex-col">
+            <ToastContainer />
             
             <form onSubmit={handleSubmit(updateUser)} className={containerBase}>
-                <div className="space-y-6">
+                <div className="space-y-5">
+                    <div className="flex items-center justify-between gap-3 pb-2 border-b border-outline-variant/40 dark:border-slate-700">
+                        <p className="text-sm font-headline font-bold text-primary-container dark:text-white">Información de la cuenta</p>
+                        <span className="text-[10px] uppercase tracking-widest text-on-surface-variant dark:text-slate-400">Editable</span>
+                    </div>
+
                     {/* FILA: NOMBRE Y APELLIDO */}
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
@@ -73,12 +71,11 @@ const FormularioPerfil = () => {
                 </div> 
 
                 {/* BOTÓN DE ACCIÓN */}
-                <div className="mt-8">
+                <div className="mt-7">
                     <motion.button 
                         type="submit" 
                         disabled={isSubmitting}
-                        // Botón camaleón: Negro en claro / Esmeralda en oscuro
-                        className="w-full py-4 rounded-2xl bg-black dark:bg-[#10b981] text-white font-black uppercase text-[11px] tracking-[0.2em] border-2 border-black dark:border-[#3f3f46] transition-all flex items-center justify-center gap-2 shadow-lg hover:opacity-90"
+                        className="w-full py-3.5 rounded-xl bg-primary-container hover:bg-on-primary-fixed-variant dark:bg-cyan-500/90 dark:hover:bg-cyan-500 text-white font-semibold uppercase text-[11px] tracking-[0.2em] border border-primary-container dark:border-cyan-400/30 transition-all flex items-center justify-center gap-2 shadow-sm disabled:opacity-60"
                         whileTap={{ scale: 0.98 }}
                     >
                         <Save size={16} />
