@@ -10,7 +10,7 @@ const LoginSuccess = () => {
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         const token = params.get("token");
-        const rol = params.get("rol");
+        const rol = params.get("rol") || "usuario";
 
         if (token && rol) {
             setToken(token);

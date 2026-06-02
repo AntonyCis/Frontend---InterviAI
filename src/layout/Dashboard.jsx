@@ -9,6 +9,7 @@ import {
   User,
   Layers,
   Plus,
+  Code2,
   Crown,
   LogOut,
   Sparkles,
@@ -37,12 +38,12 @@ const Dashboard = () => {
     ES: {
       dash: 'Dashboard', profile: 'Mi Perfil', jobs: 'Entrevistas', interview: 'Entrevista', plans: 'Planes Pro',
       exit: 'Desconectarse', online: 'SISTEMA ONLINE', role: 'ADMINISTRADOR',
-      adminPanel: 'Gestión Usuarios', stats: 'Métricas Globales'
+      adminPanel: 'Gestión Usuarios', stats: 'Métricas Globales', exercises: 'Ejercicios'
     },
     EN: {
       dash: 'Dashboard', profile: 'My Profile', jobs: 'Jobs', interview: 'Interview', plans: 'Pricing Plans',
       exit: 'Sign Out', online: 'SYSTEM ONLINE', role: 'ADMINISTRATOR',
-      adminPanel: 'Manage Users', stats: 'Global Stats'
+      adminPanel: 'Manage Users', stats: 'Global Stats', exercises: 'Exercises'
     }
   }.ES
 
@@ -54,6 +55,7 @@ const Dashboard = () => {
     { path: '/dashboard/profile', name: text.profile, icon: User },
     ...(!isAdmin ? [
       { path: '/dashboard/list', name: text.jobs, icon: Layers },
+      { path: '/dashboard/exercises', name: text.exercises, icon: Code2 },
       { path: '/dashboard/create', name: text.interview, icon: Plus },
     ] : [
       { path: '/dashboard/users', name: text.adminPanel, icon: Users },

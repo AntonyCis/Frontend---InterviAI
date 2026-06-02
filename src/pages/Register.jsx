@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { ToastContainer } from "react-toastify";
 import { useFetch } from "../hooks/useFetch";
@@ -13,8 +13,6 @@ export const Register = () => {
   const fetchDataBackend = useFetch();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { isDark } = storeTheme();
-  const navigate = useNavigate();
-
   const vantaRef = useRef(null);
   const [vantaEffect, setVantaEffect] = useState(null);
 
@@ -39,7 +37,7 @@ export const Register = () => {
   }, [vantaEffect, isDark]);
 
   const registerUser = async (dataForm) => {
-    const url = `${import.meta.env.VITE_BACKEND_URL}/admin/registro`;
+    const url = `${import.meta.env.VITE_BACKEND_URL}/user/registro`;
     await fetchDataBackend(url, dataForm, "POST");
   };
 

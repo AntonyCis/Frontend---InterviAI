@@ -50,15 +50,15 @@ describe('Componente de Login', () => {
     );
 
     // Llenamos los campos (Asegúrate de que los placeholders coincidan)
-    fireEvent.change(screen.getByPlaceholderText(/example@mail.com/i), {
+    fireEvent.change(screen.getByPlaceholderText(/nombre@empresa.com/i), {
       target: { value: 'test@correo.com' }
     });
-    fireEvent.change(screen.getByPlaceholderText(/••••••••••••/i), {
+    fireEvent.change(screen.getByPlaceholderText(/••••••••/i), {
       target: { value: 'password123' }
     });
 
     // Enviamos el formulario
-    fireEvent.click(screen.getByRole('button', { name: /iniciar sesión/i }));
+    fireEvent.click(screen.getByRole('button', { name: /ingresar al workspace/i }));
 
     // Esperamos que el mock del backend se haya llamado
     await waitFor(() => {
@@ -80,10 +80,10 @@ describe('Componente de Login', () => {
     );
 
     // Llenar datos para que pase la validación de React Hook Form
-    fireEvent.change(screen.getByPlaceholderText(/example@mail.com/i), { target: { value: 'error@test.com' } });
-    fireEvent.change(screen.getByPlaceholderText(/••••••••••••/i), { target: { value: '123456' } });
+    fireEvent.change(screen.getByPlaceholderText(/nombre@empresa.com/i), { target: { value: 'error@test.com' } });
+    fireEvent.change(screen.getByPlaceholderText(/••••••••/i), { target: { value: '123456' } });
 
-    fireEvent.click(screen.getByRole('button', { name: /iniciar sesión/i }));
+    fireEvent.click(screen.getByRole('button', { name: /ingresar al workspace/i }));
 
     // En lugar de buscar "procesando solicitud" (que puede ser muy rápido),
     // buscamos el resultado final del fallo si tu componente lo maneja:

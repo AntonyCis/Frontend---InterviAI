@@ -2,8 +2,9 @@ import axios from "axios"
 import { toast } from "react-toastify"
 
 export function useFetch() {
-    const fetchDataBackend = async (url, data = null, method = "GET", headers = {}) => {
-        const loadingToast = toast.loading("Procesando solicitud...")
+    const fetchDataBackend = async (url, data = null, method = "GET", headers = {}, options = {}) => {
+        const { silent = false } = options
+        const loadingToast = silent ? null : toast.loading("Procesando solicitud...")
         try {
             // DETECCIÓN INTELIGENTE: 
             // Si la data es FormData, dejamos que el navegador ponga el Content-Type solo
@@ -28,18 +29,18 @@ export function useFetch() {
 
             const response = await axios(options)
             
-            toast.dismiss(loadingToast)
-            if (response?.data?.msg) {
+            if (loadingToast) toast.dismiss(loadingToast)
+            if (!silent && response?.data?.msg) {
                 toast.success(response.data.msg)
             }
             return response?.data
 
         } catch (error) {
-            toast.dismiss(loadingToast)
+            if (loadingToast) toast.dismiss(loadingToast)
             console.error("Error en useFetch:", error)
             
             const errorMsg = error.response?.data?.msg || "Error en la comunicación con el servidor";
-            toast.error(errorMsg)
+            if (!silent) toast.error(errorMsg)
             
             // Re-lanzamos el error para que el onSubmit pueda capturarlo si es necesario
             throw error; 

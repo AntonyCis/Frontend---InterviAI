@@ -46,11 +46,23 @@ const Login = () => {
 
   const loginUser = async (dataForm) => {
     try {
-      const url = dataForm.password.includes("VET")
-        ? `${import.meta.env.VITE_BACKEND_URL}/user/login`
-        : `${import.meta.env.VITE_BACKEND_URL}/admin/login`;
-      
-      const response = await fetchDataBackend(url, dataForm, 'POST');
+      const userUrl = `${import.meta.env.VITE_BACKEND_URL}/user/login`;
+      const adminUrl = `${import.meta.env.VITE_BACKEND_URL}/admin/login`;
+
+      let response;
+
+      try {
+        response = await fetchDataBackend(userUrl, dataForm, 'POST', {}, { silent: true });
+      } catch (error) {
+        const status = error.response?.status;
+        const msg = error.response?.data?.msg || "";
+
+        if (status === 404 || msg.toLowerCase().includes("no se encuentra registrado")) {
+          response = await fetchDataBackend(adminUrl, dataForm, 'POST', {}, { silent: true });
+        } else {
+          throw error;
+        }
+      }
       
       if (response) {
         setToken(response.token);
