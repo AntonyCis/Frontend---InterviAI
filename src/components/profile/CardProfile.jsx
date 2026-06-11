@@ -1,6 +1,6 @@
 import storeProfile from "../../context/storeProfile";
 import { motion } from "framer-motion";
-import { Camera, User, Mail, Phone, MapPin, BadgeCheck, ShieldCheck, Crown } from "lucide-react";
+import { User, Mail, Phone, MapPin, BadgeCheck, ShieldCheck, Crown } from "lucide-react";
 
 export const CardProfile = () => {
   const { user } = storeProfile();
@@ -20,6 +20,7 @@ export const CardProfile = () => {
   const borderStyle = "border border-outline-variant/70 dark:border-slate-700";
   const textPrimary = "text-on-surface dark:text-white";
   const textSecondary = "text-on-surface-variant dark:text-slate-400";
+  const avatarSrc = user?.avatarUrl || "https://cdn-icons-png.flaticon.com/512/4715/4715329.png";
 
   return (
     <motion.div 
@@ -32,14 +33,10 @@ export const CardProfile = () => {
       <div className="relative flex flex-col items-center mb-6 z-10">
         <div className="relative group/avatar">
           <img  
-            src="https://cdn-icons-png.flaticon.com/512/4715/4715329.png"  
+            src={avatarSrc}  
             alt="img-client"  
             className={`w-24 h-24 rounded-full ${borderStyle} p-1 bg-white dark:bg-slate-950 object-cover`} 
           />
-          <label className={`absolute bottom-0 right-0 bg-secondary dark:bg-cyan-500 text-white rounded-full p-2 cursor-pointer border-2 border-surface-container-low dark:border-slate-900`}>
-            <Camera size={16} strokeWidth={3} />
-            <input type="file" accept="image/*" className="hidden" />
-          </label>
         </div>
 
         <div className="mt-4 text-center">

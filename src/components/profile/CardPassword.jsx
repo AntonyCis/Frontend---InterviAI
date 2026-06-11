@@ -7,10 +7,13 @@ import { Lock, KeyRound, ShieldCheck, AlertCircle } from "lucide-react"
 const CardPassword = () => {
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm()
     const { user, updatePasswordProfile } = storeProfile()
-    const { clearToken } = storeAuth()
+    const { rol, clearToken } = storeAuth()
 
     const updatePassword = async (dataForm) => {
-        const url = `${import.meta.env.VITE_BACKEND_URL}/actualizarpassword/${user._id}`
+        const endpoint = rol === "administrador"
+            ? "admin/actualizar-password"
+            : "user/actualizar-password"
+        const url = `${import.meta.env.VITE_BACKEND_URL}/${endpoint}`
         if (await updatePasswordProfile(url, dataForm)) clearToken()
     }
 

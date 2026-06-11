@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios'; // O usa fetch si prefieres
-import { Zap, Loader2, Users, Activity, ShieldCheck, ArrowUpRight } from 'lucide-react';
+import { Zap, Loader2, Users, Activity, ShieldCheck } from 'lucide-react';
 import {
   Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement,
   BarElement, Title, Tooltip, Legend, Filler
@@ -35,7 +35,8 @@ export default function Panel() {
           const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/interview/history`, {
             headers: { Authorization: `Bearer ${token}` }
           });
-          setInterviews(data.filter(i => i.isCompleted).reverse());
+          const interviews = data?.interviews || (Array.isArray(data) ? data : []);
+          setInterviews(interviews.filter(i => i.isCompleted).reverse());
         }
       } catch (error) {
         console.error("Error al obtener historial:", error);

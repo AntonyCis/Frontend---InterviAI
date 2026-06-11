@@ -15,8 +15,6 @@ const LoginSuccess = () => {
         if (token && rol) {
             setToken(token);
             setRol(rol);
-            // Si usas localStorage para persistencia, guárdalo aquí también
-            localStorage.setItem('token', token); 
             navigate("/dashboard");
         } else {
             navigate("/login");

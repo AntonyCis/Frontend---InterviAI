@@ -1,14 +1,14 @@
 import { create } from "zustand"
 import axios from "axios"
 import {toast} from 'react-toastify'
+import storeAuth from "./storeAuth"
 
 
 const getAuthHeaders = () => {
-    const storedUser = JSON.parse(localStorage.getItem("auth-token"))
+    const { token } = storeAuth.getState()
     return {
         headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${storedUser?.state?.token}`,
+            Authorization: `Bearer ${token}`,
         },
     }
 }
@@ -20,8 +20,8 @@ const storeProfile = create((set) => ({
     clearUser: () => set({ user: null }),
     profile: async () => {
         try {
-            const storedUser = JSON.parse(localStorage.getItem("auth-token"))
-            const endpoint = storedUser.state.rol ==="administrador"
+            const { rol } = storeAuth.getState()
+            const endpoint = rol ==="administrador"
                 ? "admin/perfil"
                 : "user/perfil"
             const url = `${import.meta.env.VITE_BACKEND_URL}/${endpoint}`
@@ -34,7 +34,14 @@ const storeProfile = create((set) => ({
 
     updateProfile:async(url, data)=>{
         try {
-            const respuesta = await axios.put(url, data, getAuthHeaders())
+            const isFormData = data instanceof FormData
+            const headers = getAuthHeaders()
+
+            if (!isFormData) {
+                headers.headers["Content-Type"] = "application/json"
+            }
+
+            const respuesta = await axios.put(url, data, headers)
             set({ user: respuesta.data })
             toast.success("Perfil actualizado correctamente")
         } catch (error) {

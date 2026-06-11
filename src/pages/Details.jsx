@@ -1,39 +1,51 @@
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router"
 import { motion } from "framer-motion"
 import { 
-    ArrowLeft, 
-    BrainCircuit, 
-    Target, 
-    Award, 
-    MessageSquare, 
-    Info, 
-    Zap, 
-    FileText, 
-    ChevronRight ,
-    Trash2
+    ArrowLeft, BrainCircuit, Award, MessageSquare, 
+    Zap, Clock, XCircle, Star, FileDown, Loader2
 } from "lucide-react"
 import { useFetch } from "../hooks/useFetch"
-
+import storeAuth from "../context/storeAuth"
+import storeProfile from "../context/storeProfile"
+import { generateInterviewPDF } from "../helpers/generatePdf"
+import { toast } from "react-toastify"
 
 const Details = () => {
     const { id } = useParams()
     const navigate = useNavigate()
     const fetchDataBackend = useFetch()
+    const { token } = storeAuth()
+    const { user } = storeProfile()
     const [data, setData] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [generatingPdf, setGeneratingPdf] = useState(false)
+
+    const handleGeneratePdf = async () => {
+        if (!data) return
+        setGeneratingPdf(true)
+        try {
+            const userName = user?.nombre ? `${user.nombre} ${user.apellido || ''}`.trim() : null
+            await generateInterviewPDF(data, userName)
+            toast.success('PDF generado correctamente')
+        } catch (error) {
+            console.error('Error generando PDF:', error)
+            toast.error('Error al generar el PDF')
+        } finally {
+            setGeneratingPdf(false)
+        }
+    }
 
     useEffect(() => {
         const getDetails = async () => {
             try {
-                const baseURL = import.meta.env.VITE_BACKEND_URL;
-                const storage = JSON.parse(localStorage.getItem("auth-token"))
-                const token = storage?.state?.token || storage?.token;
-
-                const res = await fetchDataBackend(`${baseURL}/interview/detail/${id}`, null, "GET", {
-                    Authorization: `Bearer ${token}`
-                })
+                const res = await fetchDataBackend(
+                    `${import.meta.env.VITE_BACKEND_URL}/interview/detail/${id}`,
+                    null,
+                    "GET",
+                    { Authorization: `Bearer ${token}` },
+                    { silent: true }
+                )
                 if (res) setData(res)
             } catch (error) {
                 console.error("Error al obtener detalles:", error)
@@ -42,195 +54,244 @@ const Details = () => {
             }
         }
         getDetails()
-    }, [id])
+    }, [id, token])
 
     if (loading) return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-[#F3F2EE] dark:bg-[#0e0e0e] space-y-4">
-             <Zap className="text-emerald-500 animate-pulse" size={48} />
-             <span className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-400">Analizando Reporte...</span>
+        <div className="p-10 flex items-center justify-center gap-2 text-on-surface-variant dark:text-slate-400">
+            <Zap className="text-secondary dark:text-cyan-400 animate-pulse" size={24} />
+            <span className="text-sm font-semibold">Analizando Reporte...</span>
         </div>
     )
 
-    if (!data) return <div className="p-20 text-center">No se encontró la entrevista.</div>
+    if (!data) return (
+        <div className="p-20 text-center text-on-surface-variant dark:text-slate-400">
+            No se encontro la entrevista.
+        </div>
+    )
+
+    const cardStyle = "bg-surface-container-low dark:bg-slate-900/70 border border-outline-variant/50 dark:border-slate-800 rounded-2xl p-6 shadow-sm"
+
+    const getScoreColor = (score) => {
+        if (score >= 8) return 'text-emerald-500'
+        if (score >= 5) return 'text-amber-500'
+        return 'text-red-500'
+    }
+
+    const getScoreBg = (score) => {
+        if (score >= 8) return 'bg-emerald-500/10 border-emerald-500/30'
+        if (score >= 5) return 'bg-amber-500/10 border-amber-500/30'
+        return 'bg-red-500/10 border-red-500/30'
+    }
+
+    const formatDuration = () => {
+        if (!data.startedAt || !data.completedAt) return null
+        const diff = new Date(data.completedAt) - new Date(data.startedAt)
+        const mins = Math.floor(diff / 60000)
+        return `${mins} min`
+    }
 
     return (
         <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="min-h-screen w-full bg-[#F3F2EE] dark:bg-[#0e0e0e] p-6 md:p-16 transition-colors duration-500"
+            className="space-y-6"
         >
-            <div className="max-w-7xl mx-auto space-y-16">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <button 
+                        onClick={() => navigate('/dashboard/list')}
+                        className="flex items-center gap-2 text-on-surface-variant dark:text-slate-400 hover:text-secondary dark:hover:text-cyan-400 transition-colors mb-3 group text-sm"
+                    >
+                        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                        <span className="font-semibold">Volver al historial</span>
+                    </button>
+                    <h1 className="text-3xl font-headline font-bold text-primary-container dark:text-white tracking-tight">
+                        Detalle de Entrevista
+                    </h1>
+                </div>
                 
-                {/* HEADER SUPERIOR */}
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
-                    <div>
-                        <button 
-                            onClick={() => navigate('/dashboard/list')}
-                            className="flex items-center gap-2 text-zinc-400 hover:text-emerald-600 transition-colors mb-6 group"
+                <div className="flex items-center gap-3">
+                    <div className="bg-surface-container-low dark:bg-slate-800 px-4 py-2 rounded-xl border border-outline-variant/50 dark:border-slate-700">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant dark:text-slate-400 block">ID</span>
+                        <span className="text-sm font-mono font-bold text-on-surface dark:text-white">
+                            #{data._id?.slice(-6).toUpperCase()}
+                        </span>
+                    </div>
+                    {!data.isCompleted && (
+                        <motion.button 
+                            whileHover={{ scale: 1.03 }}
+                            onClick={() => navigate(`/dashboard/chat/${data._id}`)}
+                            className="px-5 py-3 bg-secondary dark:bg-cyan-500 text-white rounded-xl font-bold text-sm flex items-center gap-2"
                         >
-                            <ArrowLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.4em]">Volver al historial</span>
-                        </button>
-                        <h1 className="text-7xl font-black text-zinc-900 dark:text-white uppercase tracking-tighter leading-none">
-                            Detalle <br /> <span className="text-emerald-600">General</span>
-                        </h1>
-                    </div>
-                    
-                    <div className="flex items-center gap-4">
-                        <div className="bg-white dark:bg-zinc-900 px-8 py-4 rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-sm">
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400 block mb-1">Referencia</span>
-                            <span className="text-lg font-bold text-zinc-900 dark:text-white font-mono">
-                                #IV-{data._id.slice(-6).toUpperCase()}
-                            </span>
-                        </div>
-                        {!data.isCompleted && (
-                            <motion.button 
-                                whileHover={{ scale: 1.05 }}
-                                onClick={() => navigate(`/dashboard/chat/${data._id}`)}
-                                className="p-5 bg-emerald-600 text-white rounded-2xl shadow-lg shadow-emerald-500/20"
-                            >
-                                <Zap size={24} fill="currentColor" />
-                            </motion.button>
-                        )}
-                    </div>
-                </div>
-
-                {/* CONTENIDO PRINCIPAL: GRID 12 COLUMNAS */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                    
-                    {/* COLUMNA IZQUIERDA: DATOS (8 COL) */}
-                    <div className="lg:col-span-8 space-y-16">
-                        
-                        {/* SECCIÓN 01: PERFIL */}
-                        <section>
-                            <div className="flex items-center gap-3 mb-8 opacity-50 text-zinc-900 dark:text-white">
-                                <Target size={18} />
-                                <h2 className="text-xs font-black uppercase tracking-[0.3em]">Perfil de la Vacante</h2>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                                <DataField label="Título del Puesto" value={data.title || "No especificado"} />
-                                <DataField label="Tipo de Evaluación" value={data.type} color="text-emerald-600 uppercase" />
-                                <DataField label="Fecha de Sesión" value={new Date(data.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })} />
-                                <div className="space-y-2">
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Estado de Evaluación</span>
-                                    <div className="flex items-center gap-3">
-                                        <div className={`w-2.5 h-2.5 rounded-full ${data.isCompleted ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse'}`} />
-                                        <p className="text-xl font-bold uppercase tracking-tighter text-zinc-900 dark:text-white">
-                                            {data.isCompleted ? 'Completada' : 'Sesión Activa'}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <hr className="border-zinc-300 dark:border-zinc-800" />
-
-                        {/* SECCIÓN 02: SCORE */}
-                        <section>
-                            <div className="flex items-center gap-3 mb-8 opacity-50 text-zinc-900 dark:text-white">
-                                <Award size={18} />
-                                <h2 className="text-xs font-black uppercase tracking-[0.3em]">Rendimiento General</h2>
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                                <div className="space-y-1.5">
-                                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Puntuación Final</span>
-                                    <p className="text-6xl font-black tracking-tighter text-emerald-600">
-                                        {data.isCompleted ? data.averageScore : "--"}<span className="text-zinc-300 text-3xl">/10</span>
-                                    </p>
-                                </div>
-                                <DataField 
-                                    label="Nivel de Candidato" 
-                                    value={!data.isCompleted ? "Pendiente" : (data.averageScore >= 8 ? "Senior / Expert" : "Mid-Level")} 
-                                />
-                            </div>
-                        </section>
-
-                        {/* SECCIÓN 03: FEEDBACK (BANNER) */}
-                        <section className="bg-emerald-50 dark:bg-emerald-950/20 p-8 rounded-[2rem] border border-emerald-100 dark:border-emerald-900/30">
-                            <div className="flex gap-4">
-                                <MessageSquare className="text-emerald-600 shrink-0" size={24} />
-                                <div>
-                                    <span className="text-[10px] font-black uppercase tracking-widest text-emerald-700/60 block mb-2">Feedback del Asistente IA</span>
-                                    <p className="text-lg font-medium text-emerald-900 dark:text-emerald-100 italic leading-relaxed">
-                                        "{data.overallFeedback || "La entrevista aún no ha finalizado. Completa la conversación para que la IA genere un análisis de tus respuestas y áreas de mejora."}"
-                                    </p>
-                                </div>
-                            </div>
-                        </section>
-                    </div>
-
-                    {/* COLUMNA DERECHA: ACCIONES (4 COL) */}
-                    <div className="lg:col-span-4 flex flex-col gap-8">
-                        {/* CARD DE SCORE VISUAL */}
-                        <div className="aspect-square bg-white dark:bg-zinc-900 rounded-[3.5rem] p-12 border border-zinc-200 dark:border-zinc-800 shadow-sm flex items-center justify-center relative overflow-hidden group">
-                            <BrainCircuit className="w-full h-auto text-zinc-100 dark:text-zinc-800 absolute transition-transform group-hover:scale-110 duration-700" size={200} />
-                            <div className="relative z-10 text-center">
-                                <span className="text-[10px] font-black uppercase tracking-[0.4em] text-emerald-600 block mb-2">Success Rate</span>
-                                <span className="text-7xl font-black text-zinc-900 dark:text-white italic">
-                                    {data.isCompleted ? `${data.averageScore * 10}%` : "---"}
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* BOTÓN PRINCIPAL DINÁMICO */}
-                        {!data.isCompleted ? (
-                            <button 
-                                onClick={() => navigate(`/dashboard/chat/${data._id}`)}
-                                className="w-full py-6 bg-emerald-600 text-white rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-zinc-900 dark:hover:bg-white dark:hover:text-zinc-900 transition-all shadow-xl shadow-emerald-500/20 flex items-center justify-center gap-3 group"
-                            >
-                                <Zap size={18} className="group-hover:animate-bounce" />
-                                Reanudar Entrevista
-                            </button>
-                        ) : (
-                            <button className="w-full py-6 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:bg-emerald-600 dark:hover:bg-emerald-500 dark:hover:text-white transition-all shadow-xl shadow-black/5 flex items-center justify-center gap-3">
-                                <FileText size={18} />
-                                Generar Reporte PDF
-                            </button>
-                        )}
-
-                        {/* BOTÓN SECUNDARIO (Si ya terminó, permite ver el historial) */}
-                        {data.isCompleted && (
-                            <button 
-                                onClick={() => navigate(`/dashboard/chat/${data._id}`)}
-                                className="w-full py-4 border-2 border-dashed border-zinc-300 dark:border-zinc-800 text-zinc-400 rounded-2xl font-black uppercase text-[10px] tracking-[0.4em] hover:border-emerald-500 hover:text-emerald-500 transition-all flex items-center justify-center gap-2"
-                            >
-                                Ver Transcripción <ChevronRight size={14} />
-                            </button>
-                        )}
-                    </div>
-                </div>
-
-                {/* SECCIÓN INFERIOR: SEGUIMIENTO / INFO EXTRA */}
-                <div className="pt-16 border-t border-zinc-300 dark:border-zinc-800 space-y-10">
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-                        <div>
-                            <h2 className="text-4xl font-black uppercase tracking-tighter text-zinc-900 dark:text-white">Análisis Técnico</h2>
-                            <p className="text-zinc-500 font-medium mt-1">Desglose de competencias y respuestas analizadas por el motor de IA.</p>
-                        </div>
-                    </div>
-
-                    <div className="bg-white/50 dark:bg-zinc-900/50 backdrop-blur-sm rounded-[3rem] border border-zinc-200 dark:border-zinc-800 p-12 shadow-sm text-center">
-                         <Info className="mx-auto text-zinc-300 mb-4" size={40} />
-                         <p className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-400 max-w-md mx-auto leading-loose">
-                            La transcripción detallada y el análisis por pregunta se habilitarán al finalizar la sesión actual.
-                         </p>
-                    </div>
+                            <Zap size={16} />
+                            Continuar
+                        </motion.button>
+                    )}
                 </div>
             </div>
+
+            <section className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className={cardStyle}>
+                    <p className="text-[10px] uppercase tracking-widest text-on-surface-variant dark:text-slate-400 font-label">Tipo</p>
+                    <p className="text-lg font-bold mt-1 text-on-surface dark:text-white capitalize">{data.type?.replace('_', ' ')}</p>
+                </div>
+                <div className={cardStyle}>
+                    <p className="text-[10px] uppercase tracking-widest text-on-surface-variant dark:text-slate-400 font-label">Fecha</p>
+                    <p className="text-lg font-bold mt-1 text-on-surface dark:text-white">
+                        {new Date(data.createdAt).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                    </p>
+                </div>
+                <div className={cardStyle}>
+                    <p className="text-[10px] uppercase tracking-widest text-on-surface-variant dark:text-slate-400 font-label">Estado</p>
+                    <div className="flex items-center gap-2 mt-1">
+                        <div className={`w-2.5 h-2.5 rounded-full ${data.isCompleted ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse'}`} />
+                        <p className="text-lg font-bold text-on-surface dark:text-white">
+                            {data.isCompleted ? 'Completada' : 'En progreso'}
+                        </p>
+                    </div>
+                </div>
+                <div className={cardStyle}>
+                    <p className="text-[10px] uppercase tracking-widest text-on-surface-variant dark:text-slate-400 font-label">Duracion</p>
+                    <div className="flex items-center gap-2 mt-1">
+                        <Clock size={16} className="text-on-surface-variant dark:text-slate-400" />
+                        <p className="text-lg font-bold text-on-surface dark:text-white">
+                            {formatDuration() || '--'}
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            {data.isCompleted && (
+                <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className={`${cardStyle} md:col-span-1 flex flex-col items-center justify-center`}>
+                        <Award className="text-secondary dark:text-cyan-400 mb-2" size={28} />
+                        <p className="text-[10px] uppercase tracking-widest text-on-surface-variant dark:text-slate-400 font-label mb-1">Puntuacion Final</p>
+                        <p className={`text-5xl font-black ${getScoreColor(data.averageScore)}`}>
+                            {data.averageScore}<span className="text-xl text-on-surface-variant dark:text-slate-500">/10</span>
+                        </p>
+                    </div>
+                    
+                    <div className={`${cardStyle} md:col-span-2`}>
+                        <div className="flex items-center gap-2 mb-3">
+                            <MessageSquare className="text-secondary dark:text-cyan-400" size={18} />
+                            <p className="text-[10px] uppercase tracking-widest text-on-surface-variant dark:text-slate-400 font-label">Feedback General IA</p>
+                        </div>
+                        <p className="text-sm text-on-surface dark:text-slate-200 leading-relaxed italic">
+                            &ldquo;{data.overallFeedback || "Sin feedback disponible"}&rdquo;
+                        </p>
+                    </div>
+                </section>
+            )}
+
+            {data.isCompleted && data.questions?.length > 0 && (
+                <section className="space-y-4">
+                    <div className="flex items-center gap-2">
+                        <BrainCircuit className="text-secondary dark:text-cyan-400" size={20} />
+                        <h2 className="text-lg font-headline font-bold text-primary-container dark:text-white">Analisis por Pregunta</h2>
+                    </div>
+
+                    <div className="space-y-4">
+                        {data.questions.map((q, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.05 }}
+                                className={`${cardStyle} space-y-4`}
+                            >
+                                <div className="flex items-start justify-between gap-4">
+                                    <div className="flex items-start gap-3 flex-1">
+                                        <div className="w-8 h-8 rounded-lg bg-primary-container/10 dark:bg-cyan-500/10 flex items-center justify-center text-primary-container dark:text-cyan-300 font-bold text-sm shrink-0">
+                                            {i + 1}
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-bold text-on-surface dark:text-white">{q.questionText}</p>
+                                            <span className={`text-[10px] uppercase tracking-widest font-semibold px-2 py-0.5 rounded border mt-1 inline-block ${
+                                                q.category === 'theoretical' ? 'text-blue-500 bg-blue-500/10 border-blue-500/30' :
+                                                q.category === 'practical' ? 'text-purple-500 bg-purple-500/10 border-purple-500/30' :
+                                                'text-amber-500 bg-amber-500/10 border-amber-500/30'
+                                            }`}>
+                                                {q.category}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border ${getScoreBg(q.score)}`}>
+                                        <Star size={14} className={getScoreColor(q.score)} />
+                                        <span className={`text-sm font-black ${getScoreColor(q.score)}`}>{q.score}/10</span>
+                                    </div>
+                                </div>
+
+                                {q.userAnswer && q.userAnswer !== "No respondido" && (
+                                    <div className="pl-11 space-y-1">
+                                        <p className="text-[10px] uppercase tracking-widest text-on-surface-variant dark:text-slate-500 font-label">Tu respuesta</p>
+                                        <p className="text-sm text-on-surface dark:text-slate-300 bg-surface-container-high dark:bg-slate-800/50 rounded-xl p-3">
+                                            {q.userAnswer}
+                                        </p>
+                                    </div>
+                                )}
+
+                                {q.aiFeedback && (
+                                    <div className="pl-11 space-y-1">
+                                        <p className="text-[10px] uppercase tracking-widest text-on-surface-variant dark:text-slate-500 font-label">Feedback IA</p>
+                                        <p className="text-sm text-on-surface dark:text-slate-300 bg-secondary/5 dark:bg-cyan-500/5 border border-secondary/20 dark:border-cyan-500/20 rounded-xl p-3 italic">
+                                            {q.aiFeedback}
+                                        </p>
+                                    </div>
+                                )}
+
+                                {(!q.userAnswer || q.userAnswer === "No respondido") && (
+                                    <div className="pl-11 flex items-center gap-2 text-amber-500 text-xs font-semibold">
+                                        <XCircle size={14} /> Sin respuesta
+                                    </div>
+                                )}
+                            </motion.div>
+                        ))}
+                    </div>
+                </section>
+            )}
+
+            {data.isCompleted && (
+                <section className={`${cardStyle} flex flex-col items-center justify-center py-8`}>
+                    <button 
+                        onClick={handleGeneratePdf}
+                        disabled={generatingPdf}
+                        className="px-8 py-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-xl font-bold text-sm hover:bg-emerald-600 dark:hover:bg-emerald-500 dark:hover:text-white transition-all shadow-lg flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {generatingPdf ? (
+                            <>
+                                <Loader2 size={18} className="animate-spin" />
+                                Generando PDF...
+                            </>
+                        ) : (
+                            <>
+                                <FileDown size={18} />
+                                Generar Reporte PDF
+                            </>
+                        )}
+                    </button>
+                    <p className="text-xs text-on-surface-variant dark:text-slate-400 mt-3">
+                        Descarga un reporte completo con todas las preguntas y feedback
+                    </p>
+                </section>
+            )}
+
+            {!data.isCompleted && (
+                <section className={`${cardStyle} text-center py-12`}>
+                    <BrainCircuit className="mx-auto text-on-surface-variant/30 dark:text-slate-600 mb-4" size={40} />
+                    <p className="text-on-surface-variant dark:text-slate-400 text-sm">
+                        Completa la entrevista para ver el analisis detallado por pregunta.
+                    </p>
+                    <button 
+                        onClick={() => navigate(`/dashboard/chat/${data._id}`)}
+                        className="mt-4 px-6 py-3 bg-secondary dark:bg-cyan-500 text-white rounded-xl font-bold text-sm inline-flex items-center gap-2"
+                    >
+                        <Zap size={16} />
+                        Continuar Entrevista
+                    </button>
+                </section>
+            )}
         </motion.div>
     )
 }
 
-/* COMPONENTE REUTILIZABLE PARA CAMPOS DE DATOS */
-const DataField = ({ label, value, color = "text-zinc-900 dark:text-zinc-100" }) => (
-    <div className="space-y-1.5">
-        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">
-            {label}
-        </span>
-        <p className={`text-2xl font-bold tracking-tighter ${color}`}>
-            {value || "---"}
-        </p>
-    </div>
-)
-
-export default Details;
+export default Details

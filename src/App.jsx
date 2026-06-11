@@ -9,6 +9,7 @@ import Dashboard from './layout/Dashboard'
 import Profile from './pages/Profile'
 import List from './pages/List'
 import Exercises from './pages/Exercises'
+import ExerciseSolve from './pages/ExerciseSolve'
 import Details from './pages/Details'
 import Create from './pages/Create'
 import Update from './pages/Update'
@@ -67,6 +68,7 @@ function App() {
       <Route path="stats" element={<GlobalStats />} />
       <Route path="list" element={<List />} />
       <Route path="exercises" element={<Exercises />} />
+      <Route path="exercises/:id" element={<ExerciseSolve />} />
       <Route path="details/:id" element={<Details />} />
       <Route path="create" element={<Create />} />
       <Route path="update/:id" element={<Update />} />
