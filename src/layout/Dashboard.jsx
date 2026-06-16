@@ -21,7 +21,8 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Menu,
-  X
+  X,
+  BookOpen
 } from 'lucide-react'
 import logo from '../assets/logo.png'
 
@@ -40,12 +41,12 @@ const Dashboard = () => {
     ES: {
       dash: 'Dashboard', profile: 'Mi Perfil', jobs: 'Entrevistas', interview: 'Entrevista', plans: 'Planes Pro',
       exit: 'Desconectarse', online: 'SISTEMA ONLINE', role: 'ADMINISTRADOR',
-      adminPanel: 'Gestion Usuarios', stats: 'Metricas Globales', exercises: 'Ejercicios'
+      adminPanel: 'Gestion Usuarios', stats: 'Metricas Globales', exercises: 'Ejercicios', exercisesAdmin: 'Gestionar Ejercicios'
     },
     EN: {
       dash: 'Dashboard', profile: 'My Profile', jobs: 'Jobs', interview: 'Interview', plans: 'Pricing Plans',
       exit: 'Sign Out', online: 'SYSTEM ONLINE', role: 'ADMINISTRATOR',
-      adminPanel: 'Manage Users', stats: 'Global Stats', exercises: 'Exercises'
+      adminPanel: 'Manage Users', stats: 'Global Stats', exercises: 'Exercises', exercisesAdmin: 'Manage Exercises'
     }
   }.ES
 
@@ -61,6 +62,7 @@ const Dashboard = () => {
     ] : [
       { path: '/dashboard/users', name: text.adminPanel, icon: Users },
       { path: '/dashboard/stats', name: text.stats, icon: BarChart3 },
+      { path: '/dashboard/exercises-admin', name: text.exercisesAdmin, icon: BookOpen },
     ]),
     { path: '/dashboard/plans', name: text.plans, icon: Crown },
   ]

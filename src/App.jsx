@@ -26,6 +26,7 @@ import storeAuth from './context/storeAuth'
 import LoginSuccess from './pages/LoginSuccess'
 import UserTable from './components/dashboard/UserTable'
 import GlobalStats from './components/dashboard/GlobalStats'
+import ExerciseManager from './components/dashboard/ExerciseManager'
 
 
 
@@ -66,6 +67,7 @@ function App() {
       <Route path="profile" element={<Profile />} />
       <Route path="users" element={<UserTable />} />
       <Route path="stats" element={<GlobalStats />} />
+      <Route path="exercises-admin" element={<ExerciseManager />} />
       <Route path="list" element={<List />} />
       <Route path="exercises" element={<Exercises />} />
       <Route path="exercises/:id" element={<ExerciseSolve />} />
