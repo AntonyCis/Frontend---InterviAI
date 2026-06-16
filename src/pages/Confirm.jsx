@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useRef } from 'react'
-import { Link, useParams } from 'react-router'
+import { Link, useParams, useSearchParams } from 'react-router'
 import { ToastContainer } from 'react-toastify'
 import { useFetch } from '../hooks/useFetch'
 import { motion } from 'framer-motion'
@@ -11,6 +11,8 @@ import storeTheme from '../context/storeTheme'
 export const Confirm = () => {
     const fetchDataBackend = useFetch()
     const { token } = useParams()
+    const [searchParams] = useSearchParams()
+    const type = searchParams.get('type') || 'user'
     const { isDark } = storeTheme()
 
     const vantaRef = useRef(null)
@@ -37,7 +39,7 @@ export const Confirm = () => {
     }, [vantaEffect, isDark]);
 
     const verifyToken = async () => {
-        const url = `${import.meta.env.VITE_BACKEND_URL}/admin/confirmar/${token}`
+        const url = `${import.meta.env.VITE_BACKEND_URL}/${type}/confirmar/${token}`
         await fetchDataBackend(url)
     }
 
