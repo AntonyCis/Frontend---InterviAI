@@ -72,8 +72,8 @@ const Pricing = () => {
                         whileHover={!isAdmin ? { y: -15, transition: { duration: 0.2 } } : {}}
                         className={`relative group flex flex-col p-10 rounded-[3.5rem] border-2 transition-all duration-500
                             ${plan.popular
-                                ? 'bg-white dark:bg-zinc-900/40 border-emerald-500 shadow-[0_0_50px_rgba(16,185,129,0.15)] dark:shadow-[0_0_50px_rgba(16,185,129,0.1)]'
-                                : 'bg-white dark:bg-white/5 border-gray-200 dark:border-zinc-800 shadow-sm'
+                                ? 'bg-white dark:bg-zinc-900/60 border-emerald-500 shadow-[0_0_50px_rgba(16,185,129,0.15)] dark:shadow-[0_0_50px_rgba(16,185,129,0.1)]'
+                                : 'bg-white dark:bg-zinc-900/40 border-gray-200 dark:border-zinc-800 shadow-sm dark:shadow-none'
                             } ${isAdmin ? 'grayscale-[0.3] opacity-90' : ''}`}
                     >
                         {plan.popular && (

@@ -222,7 +222,7 @@ const ChatInterview = () => {
     }
 
     if (!interviewData) return (
-        <div className="h-screen w-full flex items-center justify-center bg-white dark:bg-[#0e0e0e]">
+        <div className="h-screen w-full flex items-center justify-center bg-surface dark:bg-slate-950">
             <Loader2 className="animate-spin text-emerald-500" size={48} />
         </div>
     )
@@ -232,8 +232,8 @@ const ChatInterview = () => {
         : 0
 
     return (
-        <div className="w-full h-screen flex flex-col bg-white dark:bg-[#0e0e0e] text-zinc-800 dark:text-zinc-200">
-            <header className="px-6 py-4 flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 bg-white/80 dark:bg-[#0e0e0e]/80 backdrop-blur-xl">
+        <div className="w-full h-screen flex flex-col bg-surface dark:bg-slate-950 text-on-surface dark:text-slate-100">
+            <header className="px-6 py-4 flex items-center justify-between border-b border-outline-variant/30 dark:border-zinc-800 bg-surface/80 dark:bg-slate-950/80 backdrop-blur-xl">
                 <div className="flex items-center gap-4">
                     <div className="flex items-center gap-2">
                         <span className={`w-2 h-2 rounded-full ${isCompleted ? 'bg-emerald-500' : 'bg-emerald-500 animate-pulse'}`} />
@@ -241,24 +241,24 @@ const ChatInterview = () => {
                             {isCompleted ? 'COMPLETADA' : 'EN CURSO'}
                         </span>
                     </div>
-                    <span className="text-zinc-400 text-sm">|</span>
-                    <span className="text-sm font-medium text-zinc-600 dark:text-zinc-400">
+                    <span className="text-on-surface-variant dark:text-zinc-400 text-sm">|</span>
+                    <span className="text-sm font-medium text-on-surface-variant dark:text-zinc-400">
                         {interviewData.type.toUpperCase()}
                     </span>
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 text-sm font-mono text-zinc-500 dark:text-zinc-400">
+                    <div className="flex items-center gap-2 text-sm font-mono text-on-surface-variant dark:text-zinc-400">
                         <Clock size={14} />
                         {formatTime(elapsedTime)}
                     </div>
-                    <div className="text-xs font-black bg-zinc-100 dark:bg-zinc-800 px-3 py-1.5 rounded-full">
+                    <div className="text-xs font-black bg-surface-container-high dark:bg-zinc-800 px-3 py-1.5 rounded-full text-on-surface dark:text-slate-200">
                         {Math.min(currentQuestionIndex + 1, interviewData.questions.length)} / {interviewData.questions.length}
                     </div>
                 </div>
             </header>
 
-            <div className="w-full h-1 bg-zinc-100 dark:bg-zinc-800">
+            <div className="w-full h-1 bg-surface-container-high dark:bg-zinc-800">
                 <motion.div 
                     className="h-full bg-emerald-500"
                     initial={{ width: 0 }}
@@ -277,7 +277,7 @@ const ChatInterview = () => {
                             className="flex gap-4 md:gap-6"
                         >
                             <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${
-                                msg.type === 'me' ? 'bg-zinc-200 dark:bg-zinc-800' : 'bg-emerald-500/10 text-emerald-500'
+                                msg.type === 'me' ? 'bg-surface-container-high dark:bg-zinc-800' : 'bg-emerald-500/10 text-emerald-500'
                             }`}>
                                 {msg.type === 'me' ? <span className="text-[10px] font-bold">Tu</span> : <Sparkles size={16} />}
                             </div>
@@ -296,7 +296,7 @@ const ChatInterview = () => {
                     {isSubmitting && (
                         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-3 px-14 py-4">
                             <Loader2 className="animate-spin text-emerald-500" size={20} />
-                            <span className="text-sm text-zinc-500 font-medium">Evaluando tus respuestas con IA...</span>
+                            <span className="text-sm text-on-surface-variant dark:text-zinc-400 font-medium">Evaluando tus respuestas con IA...</span>
                         </motion.div>
                     )}
                 </AnimatePresence>
@@ -313,13 +313,13 @@ const ChatInterview = () => {
                                         ? answers[i] ? 'bg-emerald-500' : 'bg-amber-500'
                                         : i === currentQuestionIndex 
                                             ? 'bg-emerald-500/50' 
-                                            : 'bg-zinc-200 dark:bg-zinc-700'
+                                            : 'bg-surface-container-high dark:bg-zinc-700'
                                 }`}
                             />
                         ))}
                     </div>
                     
-                    <form onSubmit={(e) => { e.preventDefault(); handleSendMessage() }} className="relative bg-zinc-100 dark:bg-[#1e1e1e] rounded-[2rem] p-2 border border-transparent focus-within:border-emerald-500/50 transition-all">
+                    <form onSubmit={(e) => { e.preventDefault(); handleSendMessage() }} className="relative bg-surface-container-high dark:bg-slate-800 rounded-[2rem] p-2 border border-transparent focus-within:border-emerald-500/50 transition-all">
                         <div className="flex items-center gap-3 px-6 py-2">
                             <textarea 
                                 rows={1}
@@ -332,13 +332,13 @@ const ChatInterview = () => {
                                     }
                                 }}
                                 placeholder="Responde a la pregunta..." 
-                                className="flex-1 bg-transparent py-3 text-lg outline-none resize-none placeholder-zinc-500 dark:text-white"
+                                className="flex-1 bg-transparent py-3 text-lg outline-none resize-none placeholder-on-surface-variant dark:text-white"
                             />
                             <button
                                 type="button"
                                 onClick={handleSkip}
                                 disabled={isTyping}
-                                className="p-2.5 rounded-full text-zinc-400 hover:text-amber-500 hover:bg-amber-500/10 transition-all disabled:opacity-30"
+                                className="p-2.5 rounded-full text-on-surface-variant dark:text-zinc-400 hover:text-amber-500 hover:bg-amber-500/10 transition-all disabled:opacity-30"
                                 title="Omitir pregunta"
                             >
                                 <AlertCircle size={18} />
@@ -347,7 +347,7 @@ const ChatInterview = () => {
                                 type="submit"
                                 disabled={!inputValue.trim() || isTyping}
                                 className={`p-3.5 rounded-full transition-all ${
-                                    inputValue.trim() ? 'bg-emerald-500 text-white' : 'text-zinc-400 opacity-50'
+                                    inputValue.trim() ? 'bg-emerald-500 text-white' : 'text-on-surface-variant dark:text-zinc-400 opacity-50'
                                 }`}
                             >
                                 <Send size={20} />

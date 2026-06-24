@@ -49,7 +49,7 @@ export default function Home() {
               Simulaciones de alta fidelidad con arquitectos senior y feedback impulsado por IA para transformar tu carrera en ingeniería.
             </p>
             <div className="flex flex-wrap gap-4">
-              <button className="bg-primary-container hover:bg-on-primary-fixed-variant text-white px-8 py-4 rounded-md font-bold flex items-center gap-2 transition-all shadow-lg">
+              <button onClick={() => window.location.href = "/login"} className="bg-primary-container hover:bg-on-primary-fixed-variant text-white px-8 py-4 rounded-md font-bold flex items-center gap-2 transition-all shadow-lg">
                 Iniciar Simulación <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>terminal</span>
               </button>
               <button className="border-2 border-outline-variant hover:border-secondary text-on-surface font-bold px-8 py-4 rounded-md transition-all">
@@ -309,10 +309,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-xl font-bold text-white font-headline">InterviAI</div>
           <div className="flex gap-8">
-            <a className="text-slate-500 hover:text-cyan-400 transition-colors font-body text-sm tracking-wide" href="#">Privacidad</a>
-            <a className="text-slate-500 hover:text-cyan-400 transition-colors font-body text-sm tracking-wide" href="#">Términos</a>
-            <a className="text-slate-500 hover:text-cyan-400 transition-colors font-body text-sm tracking-wide" href="#">Soporte</a>
-            <a className="text-slate-500 hover:text-cyan-400 transition-colors font-body text-sm tracking-wide" href="#">API</a>
+            <a className="text-slate-500 hover:text-cyan-400 transition-colors font-body text-sm tracking-wide" href="#mision">Misión</a>
+            <a className="text-slate-500 hover:text-cyan-400 transition-colors font-body text-sm tracking-wide" href="#servicios">Servicios</a>
+            <a className="text-slate-500 hover:text-cyan-400 transition-colors font-body text-sm tracking-wide" href="mailto:contacto@interviai.com">Soporte</a>
+            <a className="text-slate-500 hover:text-cyan-400 transition-colors font-body text-sm tracking-wide" href="https://documenter.getpostman.com/view/52250755/2sBXwtppbR#intro" target="_blank" rel="noopener noreferrer">API Docs</a>
           </div>
           <div className="text-slate-500 font-body text-sm tracking-wide text-center md:text-right">
             © 2026 InterviAI. Built for the modern engineer.

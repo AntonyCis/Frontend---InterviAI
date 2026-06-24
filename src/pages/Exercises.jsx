@@ -78,7 +78,7 @@ const Exercises = () => {
                             </h1>
                         </div>
                     </div>
-                    <p className="max-w-3xl text-on-surface-variant dark:text-slate-300 text-base md:text-lg leading-relaxed">
+                    <p className="max-w-3xl text-on-surface-variant dark:text-slate-400 text-base md:text-lg leading-relaxed">
                         Selecciona un ejercicio para practicar. Escribe tu solución, ejecuta el código y verifica si pasas todas las pruebas.
                     </p>
                     <div className="flex flex-wrap gap-3">
@@ -90,7 +90,7 @@ const Exercises = () => {
                                     onClick={() => setLanguage(key)}
                                     className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-full border text-sm font-semibold transition-all ${language === key
                                         ? 'bg-primary-container text-white border-primary-container'
-                                        : 'bg-transparent border-outline-variant/50 text-on-surface-variant dark:text-slate-300 hover:bg-surface-container-high'
+                                        : 'bg-transparent border-outline-variant/50 text-on-surface-variant dark:text-slate-400 hover:bg-surface-container-high'
                                     }`}
                                 >
                                     <Icon size={16} />
@@ -151,7 +151,7 @@ const Exercises = () => {
                                     </div>
                                 </div>
 
-                                <p className="text-sm text-on-surface-variant dark:text-slate-300 line-clamp-2 mb-5">
+                                <p className="text-sm text-on-surface-variant dark:text-slate-400 line-clamp-2 mb-5">
                                     {exercise.description}
                                 </p>
 

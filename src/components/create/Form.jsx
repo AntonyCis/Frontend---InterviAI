@@ -118,23 +118,23 @@ export const Form = () => {
         }
     }
 
-    const inputStyle = "w-full py-3 px-4 rounded-xl border-2 border-zinc-200 dark:border-zinc-800 bg-white/50 dark:bg-zinc-900/50 outline-none focus:border-emerald-500 transition-all text-sm"
-    const labelStyle = "text-xs font-bold uppercase tracking-wider text-zinc-500 mb-2 block"
+    const inputStyle = "w-full py-3 px-4 rounded-xl border-2 border-outline-variant/50 dark:border-zinc-700 bg-surface-container-low dark:bg-zinc-900/50 outline-none focus:border-emerald-500 transition-all text-sm text-on-surface dark:text-white placeholder:text-on-surface-variant dark:placeholder:text-zinc-500"
+    const labelStyle = "text-xs font-bold uppercase tracking-wider text-on-surface-variant dark:text-zinc-400 mb-2 block"
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto p-6">
             <ToastContainer theme="dark" />
             
             <div className="text-center mb-10">
-                <h1 className="text-3xl font-black text-zinc-800 dark:text-white flex items-center justify-center gap-3">
+                <h1 className="text-3xl font-black text-primary-container dark:text-white flex items-center justify-center gap-3">
                     <BrainCircuit className="text-emerald-500" size={32} />
                     Configura tu Entrevista con IA
                 </h1>
-                <p className="text-zinc-500 mt-2">Selecciona el tipo de entrevista y personaliza tu experiencia</p>
+                <p className="text-on-surface-variant dark:text-zinc-400 mt-2">Selecciona el tipo de entrevista y personaliza tu experiencia</p>
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-                <div className="bg-white dark:bg-zinc-900 p-8 rounded-[2rem] shadow-xl border border-zinc-100 dark:border-zinc-800 space-y-8">
+                <div className="bg-surface-container-low dark:bg-zinc-900 p-8 rounded-[2rem] shadow-xl border border-outline-variant/40 dark:border-zinc-800 space-y-8">
                     
                     <div>
                         <label className={labelStyle}>Tipo de Entrevista</label>
@@ -148,7 +148,7 @@ export const Form = () => {
                                         className={`relative flex items-start gap-3 p-4 rounded-xl border-2 cursor-pointer transition-all ${
                                             isSelected 
                                                 ? 'border-emerald-500 bg-emerald-500/5' 
-                                                : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600'
+                                                : 'border-outline-variant/50 dark:border-zinc-700 hover:border-zinc-400 dark:hover:border-zinc-600'
                                         }`}
                                     >
                                         <input 
@@ -161,8 +161,8 @@ export const Form = () => {
                                             <Icon size={18} className={type.color} />
                                         </div>
                                         <div>
-                                            <span className="text-sm font-bold text-zinc-800 dark:text-white block">{type.label}</span>
-                                            <span className="text-xs text-zinc-500 mt-0.5">{type.description}</span>
+                                            <span className="text-sm font-bold text-on-surface dark:text-white block">{type.label}</span>
+                                            <span className="text-xs text-on-surface-variant dark:text-zinc-400 mt-0.5">{type.description}</span>
                                         </div>
                                         {isSelected && (
                                             <div className="absolute top-3 right-3 w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
@@ -193,9 +193,9 @@ export const Form = () => {
                                         {...register("cvFile", { required: selectedType === 'cv' })}
                                         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                                     />
-                                    <div className="flex items-center gap-3 p-4 border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-xl hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
+                                    <div className="flex items-center gap-3 p-4 border-2 border-dashed border-outline-variant/50 dark:border-zinc-700 rounded-xl hover:bg-surface-container-low dark:hover:bg-zinc-800 transition-colors">
                                         <UploadCloud className="text-emerald-500" size={20} />
-                                        <span className="text-sm text-zinc-500">
+                                        <span className="text-sm text-on-surface-variant dark:text-zinc-400">
                                             {watch("cvFile")?.[0]?.name || "Seleccionar archivo PDF..."}
                                         </span>
                                     </div>

@@ -222,10 +222,10 @@ export const Register = () => {
           InterviAI
         </Link>
         <div className="flex flex-wrap justify-center gap-6">
-          <a href="#" className="font-body text-xs tracking-widest uppercase text-on-surface-variant dark:text-slate-400 opacity-60 hover:text-secondary dark:hover:text-cyan-400 transition-colors">Documentación</a>
-          <a href="#" className="font-body text-xs tracking-widest uppercase text-on-surface-variant dark:text-slate-400 opacity-60 hover:text-secondary dark:hover:text-cyan-400 transition-colors">Privacidad</a>
-          <a href="#" className="font-body text-xs tracking-widest uppercase text-on-surface-variant dark:text-slate-400 opacity-60 hover:text-secondary dark:hover:text-cyan-400 transition-colors">Términos</a>
-          <a href="#" className="font-body text-xs tracking-widest uppercase text-on-surface-variant dark:text-slate-400 opacity-60 hover:text-secondary dark:hover:text-cyan-400 transition-colors">Soporte</a>
+          <a href="https://documenter.getpostman.com/view/52250755/2sBXwtppbR#intro" target="_blank" rel="noopener noreferrer" className="font-body text-xs tracking-widest uppercase text-on-surface-variant dark:text-slate-400 opacity-60 hover:text-secondary dark:hover:text-cyan-400 transition-colors">API Docs</a>
+          <Link to="/" className="font-body text-xs tracking-widest uppercase text-on-surface-variant dark:text-slate-400 opacity-60 hover:text-secondary dark:hover:text-cyan-400 transition-colors">Inicio</Link>
+          <Link to="/login" className="font-body text-xs tracking-widest uppercase text-on-surface-variant dark:text-slate-400 opacity-60 hover:text-secondary dark:hover:text-cyan-400 transition-colors">Iniciar Sesión</Link>
+          <a href="mailto:contacto@interviai.com" className="font-body text-xs tracking-widest uppercase text-on-surface-variant dark:text-slate-400 opacity-60 hover:text-secondary dark:hover:text-cyan-400 transition-colors">Soporte</a>
         </div>
         <div className="mt-8 md:mt-0 font-body text-[10px] tracking-widest uppercase text-on-surface-variant dark:text-slate-500 opacity-40">
           © 2026 InterviAI. Technical Excellence Defined.

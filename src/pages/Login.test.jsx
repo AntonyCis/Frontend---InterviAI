@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { BrowserRouter } from 'react-router';
 import Login from './Login';
@@ -30,6 +30,13 @@ vi.mock('../context/storeAuth', () => ({
 // Mocks de librerías visuales (necesarios para que no rompa el render)
 vi.mock('vanta/dist/vanta.globe.min', () => ({ default: () => ({ destroy: vi.fn() }) }));
 vi.mock('three', () => ({}));
+
+vi.mock('../context/storeTheme', () => ({
+  default: () => ({
+    isDark: false,
+    toggleTheme: vi.fn(),
+  }),
+}));
 
 describe('Componente de Login', () => {
   beforeEach(() => {
@@ -90,5 +97,20 @@ describe('Componente de Login', () => {
     await waitFor(() => {
       expect(mockFetchDataBackend).toHaveBeenCalled();
     });
+  });
+
+  it('debe mostrar los enlaces funcionales en el footer de login', () => {
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
+
+    const footer = screen.getByRole('contentinfo');
+
+    expect(within(footer).getByText('API Docs')).toHaveAttribute('href', 'https://documenter.getpostman.com/view/52250755/2sBXwtppbR#intro');
+    expect(within(footer).getByText('Inicio')).toHaveAttribute('href', '/');
+    expect(within(footer).getByText('Registro')).toHaveAttribute('href', '/register');
+    expect(within(footer).getByText('Soporte')).toHaveAttribute('href', 'mailto:contacto@interviai.com');
   });
 });

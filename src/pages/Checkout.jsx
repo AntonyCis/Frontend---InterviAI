@@ -5,11 +5,12 @@ import { useFetch } from "../hooks/useFetch";
 import { useState } from "react";
 import { CreditCard, ShieldCheck, Loader2, ArrowLeft } from "lucide-react";
 import { motion } from "framer-motion";
+import storeTheme from "../context/storeTheme";
 
 // ✅ Configuración de Stripe
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY || "pk_test_51SrO4FQf6i5MrVWWBL87yUcbJD85fMH3TTixBA7NM1E9jx97rpWMQ5hPDEv9J3XHhBldWmZbCL9zhoqA5famYmYA006O3Mb4sZ");
 
-const CheckoutForm = ({ amount, planName }) => {
+const CheckoutForm = ({ amount, planName, isDark }) => {
     const stripe = useStripe();
     const elements = useElements();
     const navigate = useNavigate();
@@ -17,14 +18,13 @@ const CheckoutForm = ({ amount, planName }) => {
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState(null);
 
-    // ✅ Estilos corregidos para modo oscuro (Texto Blanco)
     const cardElementOptions = {
         style: {
             base: {
                 fontSize: '18px',
-                color: '#ffffff', // Texto blanco para que se vea
+                color: isDark ? '#ffffff' : '#1a1a2e',
                 fontFamily: 'Inter, sans-serif',
-                '::placeholder': { color: '#52525b' },
+                '::placeholder': { color: isDark ? '#52525b' : '#9ca3af' },
                 iconColor: '#10b981',
             },
             invalid: {
@@ -84,16 +84,16 @@ const CheckoutForm = ({ amount, planName }) => {
 
     return (
         <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto space-y-6">
-            <div className="bg-zinc-900/80 p-8 rounded-[2.5rem] border border-zinc-800 shadow-2xl backdrop-blur-md">
+            <div className="bg-white dark:bg-zinc-900/80 p-8 rounded-[2.5rem] border border-gray-200 dark:border-zinc-800 shadow-2xl backdrop-blur-md">
                 <div className="flex items-center justify-between mb-8">
-                    <div className="flex items-center gap-2 text-zinc-400 text-[10px] font-black uppercase tracking-[0.2em]">
+                    <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 text-[10px] font-black uppercase tracking-[0.2em]">
                         <CreditCard size={14} className="text-emerald-500" /> 
                         Método de Pago
                     </div>
-                    <span className="text-[10px] font-black text-zinc-600 tracking-widest uppercase">Stripe Secure</span>
+                    <span className="text-[10px] font-black text-zinc-400 dark:text-zinc-600 tracking-widest uppercase">Stripe Secure</span>
                 </div>
                 
-                <div className="py-4 px-2 border-b border-zinc-800 mb-2 transition-all focus-within:border-emerald-500">
+                <div className="py-4 px-2 border-b border-gray-200 dark:border-zinc-800 mb-2 transition-all focus-within:border-emerald-500">
                     <CardElement options={cardElementOptions} />
                 </div>
 
@@ -118,24 +118,25 @@ const CheckoutForm = ({ amount, planName }) => {
 const Checkout = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const { isDark } = storeTheme();
     const { amount, planName } = location.state || { amount: 0, planName: "No seleccionado" };
 
     if (amount === 0) {
         return (
-            <div className="h-screen flex items-center justify-center flex-col gap-4">
-                <p className="text-white font-bold uppercase tracking-widest text-xs">No hay plan seleccionado</p>
+            <div className="h-screen flex items-center justify-center bg-white dark:bg-transparent flex-col gap-4">
+                <p className="text-zinc-900 dark:text-white font-bold uppercase tracking-widest text-xs">No hay plan seleccionado</p>
                 <button onClick={() => navigate("/dashboard/plans")} className="text-emerald-500 underline uppercase text-[10px] font-black">Volver a Planes</button>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-start pt-2 px-6 bg-transparent">
+        <div className="min-h-screen flex flex-col items-center justify-start pt-2 px-6 bg-white dark:bg-transparent">
             {/* Botón Volver alineado a la izquierda */}
             <div className="w-full max-w-4xl self-center mb-4">
                 <button 
                     onClick={() => navigate(-1)}
-                    className="flex items-center gap-2 text-zinc-500 hover:text-white transition-colors text-[10px] font-black uppercase tracking-widest group"
+                    className="flex items-center gap-2 text-zinc-500 hover:text-zinc-900 dark:hover:text-white transition-colors text-[10px] font-black uppercase tracking-widest group"
                 >
                     <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" /> 
                     Volver
@@ -145,18 +146,18 @@ const Checkout = () => {
             {/* Título más arriba y compacto */}
             <div className="text-center mb-8">
                 <span className="text-emerald-500 text-[10px] font-black uppercase tracking-[0.4em] mb-2 block">Secure Checkout</span>
-                <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white leading-none">
+                <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-zinc-900 dark:text-white leading-none">
                     Pagar Plan <span className="text-emerald-500">{planName}</span>
                 </h1>
                 <p className="text-zinc-500 font-bold text-lg mt-2 tracking-tight uppercase">
-                    Total a facturar: <span className="text-white">${amount}.00 USD</span>
+                    Total a facturar: <span className="text-zinc-900 dark:text-white">${amount}.00 USD</span>
                 </p>
             </div>
 
             {/* Formulario de Pago */}
             <div className="w-full max-w-xl">
                 <Elements stripe={stripePromise}>
-                    <CheckoutForm amount={amount} planName={planName} />
+                    <CheckoutForm amount={amount} planName={planName} isDark={isDark} />
                 </Elements>
             </div>
         </div>
