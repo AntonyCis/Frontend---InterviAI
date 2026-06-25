@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { motion } from 'framer-motion'
-import { Code2, Braces, ArrowRight, Flame, CheckCircle2 } from 'lucide-react'
+import { Code2, Braces, Database, ArrowRight, Flame, CheckCircle2 } from 'lucide-react'
 import { useFetch } from '../hooks/useFetch'
 import storeAuth from '../context/storeAuth'
 
@@ -53,6 +53,12 @@ const Exercises = () => {
             accent: 'from-amber-500/20 to-orange-500/10',
             badge: 'bg-amber-500/20 text-amber-500 border-amber-500/30',
             label: 'JavaScript'
+        },
+        sql: {
+            icon: Database,
+            accent: 'from-purple-500/20 to-pink-500/10',
+            badge: 'bg-purple-500/20 text-purple-500 border-purple-500/30',
+            label: 'SQL'
         }
     }
 

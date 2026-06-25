@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router'
 import { motion } from 'framer-motion'
-import { ArrowLeft, PlayCircle, RotateCcw, CheckCircle2, XCircle, Lightbulb, Trophy, Code2, Braces } from 'lucide-react'
+import { ArrowLeft, PlayCircle, RotateCcw, CheckCircle2, XCircle, Lightbulb, Trophy, Code2, Braces, Database } from 'lucide-react'
 import Editor from '@monaco-editor/react'
 import { useFetch } from '../hooks/useFetch'
 import storeAuth from '../context/storeAuth'
@@ -16,7 +16,8 @@ const difficultyMap = {
 
 const langMeta = {
     python: { icon: Code2, badge: 'bg-sky-500/20 text-sky-500 border-sky-500/30', label: 'Python', accent: 'from-sky-500/20 to-cyan-500/10' },
-    javascript: { icon: Braces, badge: 'bg-amber-500/20 text-amber-500 border-amber-500/30', label: 'JavaScript', accent: 'from-amber-500/20 to-orange-500/10' }
+    javascript: { icon: Braces, badge: 'bg-amber-500/20 text-amber-500 border-amber-500/30', label: 'JavaScript', accent: 'from-amber-500/20 to-orange-500/10' },
+    sql: { icon: Database, badge: 'bg-purple-500/20 text-purple-500 border-purple-500/30', label: 'SQL', accent: 'from-purple-500/20 to-pink-500/10' }
 }
 
 const ExerciseSolve = () => {

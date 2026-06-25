@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 
 const DIFFICULTY_MAP = { muy_facil: 'Muy Fácil', facil: 'Fácil', medio: 'Medio', dificil: 'Difícil' }
 const DIFFICULTY_COLORS = { muy_facil: 'bg-emerald-500/10 text-emerald-400', facil: 'bg-cyan-500/10 text-cyan-400', medio: 'bg-amber-500/10 text-amber-400', dificil: 'bg-red-500/10 text-red-400' }
-const LANGUAGES = ['python', 'javascript']
+const LANGUAGES = ['python', 'javascript', 'sql']
 const DIFFICULTIES = ['muy_facil', 'facil', 'medio', 'dificil']
 
 const emptyForm = { title: '', description: '', language: 'python', difficulty: 'facil', goal: '', hint: '', starterCode: '', tests: [{ name: 'Test 1', input: null, expectedOutput: '', isHidden: false }], order: 0 }
