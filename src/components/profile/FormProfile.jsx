@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react"
 import storeProfile from "../../context/storeProfile"
 import storeAuth from "../../context/storeAuth"
 import { useForm } from "react-hook-form"
-import { ToastContainer } from 'react-toastify'
 import { motion } from "framer-motion"
 import { User, Mail, MapPin, Phone, Save, Camera } from "lucide-react"
 
@@ -64,7 +63,6 @@ const FormularioPerfil = () => {
 
     return ( 
         <div className="w-full h-full flex flex-col">
-            <ToastContainer />
             
             <form onSubmit={handleSubmit(updateUser)} className={containerBase}>
                 <div className="space-y-5">

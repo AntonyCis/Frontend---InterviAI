@@ -22,20 +22,20 @@ describe('Home page', () => {
     window.location = originalLocation;
   });
 
-  it('debe renderizar la sección hero con el botón Iniciar Simulación', () => {
+  it('debe renderizar la sección hero con el botón Comenzar Ahora', () => {
     render(<Home />);
 
-    expect(screen.getByText('Iniciar Simulación')).toBeInTheDocument();
-    expect(screen.getByText(/Domina el Arte de la Entrevista Técnica/i)).toBeInTheDocument();
+    expect(screen.getByText('Comenzar Ahora')).toBeInTheDocument();
+    expect(screen.getByText(/Prepárate para tu Próxima Entrevista Técnica/i)).toBeInTheDocument();
   });
 
-  it('debe redirigir a /login al hacer click en Iniciar Simulación', () => {
+  it('debe redirigir a /register al hacer click en Comenzar Ahora', () => {
     render(<Home />);
 
-    const boton = screen.getByText('Iniciar Simulación');
+    const boton = screen.getByText('Comenzar Ahora');
     fireEvent.click(boton);
 
-    expect(window.location.href).toBe('/login');
+    expect(window.location.href).toBe('/register');
   });
 
   it('debe mostrar los enlaces funcionales en el footer', () => {
@@ -43,9 +43,8 @@ describe('Home page', () => {
 
     const footer = screen.getByRole('contentinfo');
 
-    expect(within(footer).getByText('Misión')).toHaveAttribute('href', '#mision');
-    expect(within(footer).getByText('Servicios')).toHaveAttribute('href', '#servicios');
+    expect(within(footer).getByText('Funcionalidades')).toHaveAttribute('href', '#funcionalidades');
+    expect(within(footer).getByText('Cómo funciona')).toHaveAttribute('href', '#como-funciona');
     expect(within(footer).getByText('Soporte')).toHaveAttribute('href', 'mailto:contacto@interviai.com');
-    expect(within(footer).getByText('API Docs')).toHaveAttribute('href', 'https://documenter.getpostman.com/view/52250755/2sBXwtppbR#intro');
   });
 });

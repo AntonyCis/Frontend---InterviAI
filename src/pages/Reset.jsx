@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { useFetch } from '../hooks/useFetch';
-import { ToastContainer } from 'react-toastify'
 import { useNavigate, useParams, Link } from 'react-router'
 import { useForm } from 'react-hook-form'
 import { motion } from 'framer-motion'
@@ -42,7 +41,7 @@ const Reset = () => {
     }, [vantaEffect, isDark]);
 
     const changePassword = async (dataForm) => {
-        const url = `${import.meta.env.VITE_BACKEND_URL}/nuevopassword/${token}`
+        const url = `${import.meta.env.VITE_BACKEND_URL}/user/nuevo-password/${token}`
         await fetchDataBackend(url, dataForm, 'POST')
         setTimeout(() => {
             if (dataForm.password === dataForm.confirmpassword) {
@@ -53,7 +52,7 @@ const Reset = () => {
 
     useEffect(() => {
         const verifyToken = async () => {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/recuperarpassword/${token}`
+            const url = `${import.meta.env.VITE_BACKEND_URL}/user/recuperar-password/${token}`
             await fetchDataBackend(url, 'GET')
             setTokenBack(true)
         }
@@ -65,8 +64,6 @@ const Reset = () => {
             ref={vantaRef}
             className={`${isDark ? "dark" : ""} min-h-screen w-full flex flex-col bg-surface dark:bg-slate-900 font-body text-on-surface relative overflow-hidden`}
         >
-            <ToastContainer />
-
             {/* Header */}
             <header className="flex justify-between items-center px-8 py-6 w-full max-w-7xl mx-auto">
                 <Link to="/" className="text-2xl font-bold text-primary-container dark:text-white font-headline tracking-tight hover:opacity-80 transition-opacity">

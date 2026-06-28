@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
-import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useFetch } from "../hooks/useFetch";
@@ -37,7 +36,7 @@ export const Forgot = () => {
   }, [vantaEffect, isDark]);
 
   const sendMail = async (dataForm) => {
-    const url = `${import.meta.env.VITE_BACKEND_URL}/recuperarpassword`;
+    const url = `${import.meta.env.VITE_BACKEND_URL}/user/recuperar-password`;
     await fetchDataBackend(url, dataForm, "POST");
   };
 
@@ -46,8 +45,6 @@ export const Forgot = () => {
       ref={vantaRef}
       className={`${isDark ? "dark" : ""} min-h-screen w-full flex flex-col bg-surface dark:bg-slate-900 font-body text-on-surface relative overflow-hidden`}
     >
-      <ToastContainer />
-
       {/* Header */}
       <header className="flex justify-between items-center px-8 py-6 w-full max-w-7xl mx-auto">
         <Link to="/" className="text-2xl font-bold text-primary-container dark:text-white font-headline tracking-tight hover:opacity-80 transition-opacity">

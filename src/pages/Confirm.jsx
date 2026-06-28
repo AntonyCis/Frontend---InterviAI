@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router'
-import { ToastContainer } from 'react-toastify'
+
 import { useFetch } from '../hooks/useFetch'
 import { motion } from 'framer-motion'
 import * as THREE from "three";
@@ -52,7 +52,6 @@ export const Confirm = () => {
             ref={vantaRef}
             className={`${isDark ? "dark" : ""} min-h-screen w-full flex flex-col bg-surface dark:bg-slate-900 font-body text-on-surface relative overflow-hidden`}
         >
-            <ToastContainer />
 
             {/* Header */}
             <header className="flex justify-between items-center px-8 py-6 w-full max-w-7xl mx-auto">

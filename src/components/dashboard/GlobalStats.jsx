@@ -67,8 +67,8 @@ const GlobalStats = () => {
           color="#10b981" subtitle="Con entrevistas completadas" />
         <StatCard icon={BarChart3} label="Total Entrevistas" value={totalEntrevistas}
           color="#f59e0b" subtitle={`${d.entrevistas?.completadasUltimoMes || 0} completadas este mes`} />
-        <StatCard icon={DollarSign} label="Donaciones" value={`$${d.donaciones?.montoTotal || 0}`}
-          color="#8b5cf6" subtitle={`${d.donaciones?.total || 0} transacciones`} />
+        <StatCard icon={DollarSign} label="Pagos de Planes" value={`$${d.donaciones?.montoTotal || 0}`}
+          color="#8b5cf6" subtitle={`${d.donaciones?.total || 0} pagos recibidos`} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

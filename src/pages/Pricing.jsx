@@ -13,7 +13,7 @@ const Pricing = () => {
             nombre: "Basic",
             precio: 5,
             icon: <Zap size={32} />,
-            features: ["5 Entrevistas IA", "Feedback Estándar", "Soporte Comunidad"],
+            features: ["5 Entrevistas IA", "Feedback Estándar", "Ejercicios disponibles"],
             color: "text-emerald-600 dark:text-emerald-500",
             bg: "from-emerald-100 to-emerald-50 dark:from-emerald-500/10 dark:to-transparent",
             popular: false

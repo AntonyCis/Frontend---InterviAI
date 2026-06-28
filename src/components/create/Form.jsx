@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useFetch } from "../../hooks/useFetch" 
 import { useNavigate } from "react-router"
 import { useForm } from "react-hook-form"
-import { toast, ToastContainer } from "react-toastify"
+import { toast } from "react-toastify"
 import { Sparkles, UploadCloud, Loader2, BrainCircuit, Code2, Users, FileText, Briefcase } from "lucide-react" 
 import { motion, AnimatePresence } from "framer-motion"
 import storeAuth from "../../context/storeAuth"
@@ -123,7 +123,6 @@ export const Form = () => {
 
     return (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-4xl mx-auto p-6">
-            <ToastContainer theme="dark" />
             
             <div className="text-center mb-10">
                 <h1 className="text-3xl font-black text-primary-container dark:text-white flex items-center justify-center gap-3">
